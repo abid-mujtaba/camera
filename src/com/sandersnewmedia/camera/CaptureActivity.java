@@ -41,8 +41,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
 
         setContentView(R.layout.capture);
@@ -82,6 +80,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 //        }
 //    }
 
+    public void onRecordClick(View v) {
+
+        Toast.makeText(this, "Record clicked!", Toast.LENGTH_SHORT).show();
+    }
+
     private void prepareRecorder() {
         recorder = new MediaRecorder();
         recorder.setPreviewDisplay(holder.getSurface());
@@ -109,6 +112,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         Log.d(LOGTAG, "surfaceCreated");
 
         camera = Camera.open();
+        camera.setDisplayOrientation(90);
 
         try {
             camera.setPreviewDisplay(holder);
