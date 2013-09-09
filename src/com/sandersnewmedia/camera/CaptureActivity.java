@@ -2,26 +2,20 @@ package com.sandersnewmedia.camera;
 
 // Most of this code is based on the git project: https://github.com/vanevery/Custom-Video-Capture-with-Preview.git
 
-//import android.app.Activity;
-//import android.os.Bundle;
-
 import java.io.File;
 import java.io.IOException;
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.Toast;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
@@ -51,35 +45,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         holder.addCallback(this);             // Note: This is the line which causes the emulator app to crash
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-//        cameraView.setClickable(true);
-//        cameraView.setOnClickListener(this);
     }
 
-//    public void onClick(View v) {
-//        if (recording) {
-//            Toast.makeText(this, "Stop", Toast.LENGTH_SHORT).show();
-//            recorder.stop();
-//            if (usecamera) {
-//                try {
-//                    camera.reconnect();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            // recorder.release();
-//            recording = false;
-//            Log.v(LOGTAG, "Recording Stopped");
-//            // Let's prepareRecorder so we can record again
-//            prepareRecorder();
-//        } else {
-//            Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
-//
-//            recording = true;
-//            recorder.start();
-//            Log.v(LOGTAG, "Recording Started");
-//        }
-//    }
 
     public void onRecordClick(View v) {
 
@@ -99,19 +66,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
             {
                 Log.e(LOGTAG, "Failed to reconnect camera.");
             }
-
-            prepareRecorder();      // Set up recorder fo the next recording
-
-//            Toast.makeText(this, "Stop Recording!", Toast.LENGTH_SHORT).show();
         }
         else
         {
             btnRecord.setText("Pause");
             recording = true;
 
+            prepareRecorder();
             recorder.start();
-
-//            Toast.makeText(this, "Start Recording!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -190,8 +152,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
                 Log.e(LOGTAG,e.getMessage());
                 e.printStackTrace();
             }
-
-            prepareRecorder();
         }
     }
 
