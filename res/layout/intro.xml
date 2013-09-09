@@ -15,7 +15,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Capture" />
+            android:text="Capture"
+            android:onClick="onClickCapture" />
 
         <Button
             android:layout_width="0dp"
