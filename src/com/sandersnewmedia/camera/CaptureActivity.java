@@ -9,7 +9,7 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -89,14 +90,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         recorder.setProfile(camcorderProfile);
 
-        try {
-            File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
-            recorder.setOutputFile(newFile.getAbsolutePath());
-        } catch (IOException e) {
-            Log.w(LOGTAG,"Couldn't create file");
-            e.printStackTrace();
-            finish();
-        }
+        Time now = new Time();
+        now.setToNow();
+        String filename = now.format("Video-%Y-%m-%d-%H:%M:%S.mp4");
+
+        File videoFile = new File(this.getExternalFilesDir(null), filename);        // We save the video file to the semi-public app folder in the External Storage
+
+        recorder.setOutputFile(videoFile.getAbsolutePath());
 
         try {
             recorder.prepare();
@@ -109,8 +109,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
             e.printStackTrace();
             finish();
         }
-
-        Log.e(LOGTAG, "prepareRecorder exitted successfully!");
     }
 
 
