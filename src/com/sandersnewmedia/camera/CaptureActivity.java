@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -82,7 +83,36 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
     public void onRecordClick(View v) {
 
-        Toast.makeText(this, "Record clicked!", Toast.LENGTH_SHORT).show();
+        Button btnRecord = (Button) findViewById(R.id.RecordButton);
+
+        if (recording)          // If already recording clicking the button is supposed to stop the recording.
+        {
+            btnRecord.setText("Record");
+            recording = false;
+
+            recorder.stop();
+
+            try {
+                camera.reconnect();
+            }
+            catch (IOException e)
+            {
+                Log.e(LOGTAG, "Failed to reconnect camera.");
+            }
+
+            prepareRecorder();      // Set up recorder fo the next recording
+
+//            Toast.makeText(this, "Stop Recording!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            btnRecord.setText("Pause");
+            recording = true;
+
+            recorder.start();
+
+//            Toast.makeText(this, "Start Recording!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void prepareRecorder() {
@@ -105,6 +135,20 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
             e.printStackTrace();
             finish();
         }
+
+        try {
+            recorder.prepare();
+        }
+        catch (IllegalStateException e) {
+            e.printStackTrace();
+            finish();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            finish();
+        }
+
+        Log.e(LOGTAG, "prepareRecorder exitted successfully!");
     }
 
 
@@ -112,7 +156,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         Log.d(LOGTAG, "surfaceCreated");
 
         camera = Camera.open();
-        camera.setDisplayOrientation(90);
+        camera.setDisplayOrientation(90);       // Ensures that the camera is displaying correctly when the phone is in Portrait Mode.
 
         try {
             camera.setPreviewDisplay(holder);

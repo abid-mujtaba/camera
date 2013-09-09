@@ -17,11 +17,12 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/RecordButton"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:text="Record"
+            android:text="@string/record"
             android:onClick="onRecordClick" />
 
     </RelativeLayout>

@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">PrototypeCamera</string>
     <string name="capture_app_name">CaptureActivity</string>
+    <string name="record">Record</string>
 </resources>
