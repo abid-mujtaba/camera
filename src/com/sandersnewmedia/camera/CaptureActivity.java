@@ -2,8 +2,7 @@ package com.sandersnewmedia.camera;
 
 // Most of this code is based on the git project: https://github.com/vanevery/Custom-Video-Capture-with-Preview.git
 
-import java.io.File;
-import java.io.IOException;
+
 import android.app.Activity;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
@@ -17,6 +16,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import java.io.File;
+import java.io.IOException;
+
+import android.widget.Toast;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.s3.transfer.model.UploadResult;
 
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
@@ -46,6 +55,28 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         holder.addCallback(this);             // Note: This is the line which causes the emulator app to crash
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
+
+
+    private void uploadVideo(File video)
+    {
+        AWSCredentials credential = new BasicAWSCredentials("access key", "secret key");
+        TransferManager manager = new TransferManager(credential);
+
+        Upload upload = manager.upload("bucket", "key", video);
+
+        Toast.makeText(this, "Uploading Video", Toast.LENGTH_SHORT).show();
+
+        try
+        {
+            UploadResult result = upload.waitForUploadResult();
+            Toast.makeText(this, "Video Uploaded!", Toast.LENGTH_SHORT).show();
+        }
+        catch (InterruptedException e)
+        {
+            Log.e(LOGTAG, "Upload Interrupted");
+            Toast.makeText(this, "Uploading Failed!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
